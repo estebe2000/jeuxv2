@@ -8,16 +8,8 @@ N'hésitez pas à mettre des suggestions de modifications :)
 
 Code d'un jeu en python par Graveen (avec mes modifications)
 
-## 😋 Série ?
+## 😋 NSI
 
-Effectivement, si de nouvelle vidéo de ce type sort sur sa chaîne, je me ferais le plaisir de mettre à jour le code, mais je ne suis pas un robot, donc attendez quelque jours \ semaines avant d'avoir le code :)
 
-## ❤️ Soutien
 
-N'hésitez pas à mettre une étoile, cela me montrera que vous aimez ce partage de code.
-
-### 🔗 Lien de la vidéo
-
-Épisode 2 : en cours de montage ( 60% d'après graven )
-
-Épisode 1 : https://youtu.be/ooITOxbYVTo
+## ❤️ A suivre
