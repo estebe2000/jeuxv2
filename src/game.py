@@ -1,5 +1,6 @@
-import pygame
+import copy
 
+import pygame
 
 from player import Player
 from src.dialog import DialogBox
@@ -22,6 +23,9 @@ class Game:
         # Définir le logo du jeu
         pygame.display.set_icon(self.player.image)
 
+        # menu
+        self.items = []
+
     def handle_input(self):
         pressed = pygame.key.get_pressed()
 
@@ -36,7 +40,6 @@ class Game:
         elif pressed[pygame.K_LEFT]:
             self.player.move_left()
 
-
     def update(self):
         self.map_manager.update()
 
@@ -49,21 +52,17 @@ class Game:
         smallfont = pygame.font.SysFont('Corbel', 25)
 
         # rendering a text written in
-        self.items = []
-        with open(f"../textes/menu.txt", "r") as filin:
-            for ligne in filin:
-                ligne = ligne.replace('"', '').strip()
-                self.items.append((ligne))
-        print(self.items)
 
+        texts, langs = [], []
+        with open(f"../textes/menu.txt", "r") as f:
+            for line in f:
+                line = line.replace('"', '').strip()
+                self.items.append([line.split()[0], line.split()[1]])
+                # list languages
+                texts.append(smallfont.render(line.split()[0], True, color))
+                langs.append(line.split()[1])
 
-        # this font
-        text1 = smallfont.render(self.items[0], True, color)
-        text2 = smallfont.render(self.items[1], True, color)
-        text3 = smallfont.render(self.items[2], True, color)
-        text4 = smallfont.render(self.items[3], True, color)
-        text5 = smallfont.render(self.items[4], True, color)
-
+        # Visual menu
         image_fond = pygame.image.load("../medias/fond.png")
         logo_fond = pygame.image.load("../medias/logo.png")
         logo_fond = pygame.transform.scale(logo_fond, (width, height // 5))
@@ -82,59 +81,30 @@ class Game:
                 if ev.type == pygame.MOUSEBUTTONDOWN:
 
                     # if the mouse is clicked on the
+                    for i in range(len(self.items)):
 
-                    if width / 2 <= mouse[0] <= width / 2 + 140 and (height / 2) - 100 <= mouse[1] <= height / 2 - 60:
-                        self.language = 'fr'
-                        self.run(self.language)
-                    elif width / 2 <= mouse[0] <= width / 2 + 140 and (height / 2) - 50 <= mouse[1] <= height / 2 - 10:
-                        self.language = 'en'
-                        self.run(self.language)
-                    elif width / 2 <= mouse[0] <= width / 2 + 140 and height / 2 <= mouse[1] <= height / 2 + 40:
-                        self.language = 'de'
-                        self.run(self.language)
-                    elif width / 2 <= mouse[0] <= width / 2 + 140 and (height / 2) + 50 <= mouse[1] <= height / 2 + 90:
-                        self.language = 'sp'
-                        self.run(self.language)
-                    elif width / 2 <= mouse[0] <= width / 2 + 140 and (height / 2) + 100 <= mouse[1] <= height / 2 + 160:
-                        pygame.quit()
+                        if width / 2 <= mouse[0] <= width / 2 + 140 and (height / 2) - 100 + i * 50 <= mouse[
+                            1] <= height / 2 - 60 + i * 50:
+                            self.language = langs[i]
+                            self.run(self.language)
+                        elif width / 2 <= mouse[0] <= width / 2 + 140 and (height / 2) + 100 <= mouse[
+                            1] <= height / 2 + 160:
+                            pygame.quit()
 
             mouse = pygame.mouse.get_pos()
 
             # if mouse is hovered on a button it
             # changes to lighter shade
-            if width / 2 <= mouse[0] <= width / 2 + 140 and height / 2 <= mouse[1] <= height / 2 + 40:
-                pygame.draw.rect(self.screen, color_light, [width / 2, height / 2, 140, 40])
-
-            elif width / 2 <= mouse[0] <= width / 2 + 140 and (height / 2) + 50 <= mouse[1] <= height / 2 + 90:
-                pygame.draw.rect(self.screen, color_light, [width / 2, (height / 2) + 50, 140, 40])
-
-            elif width / 2 <= mouse[0] <= width / 2 + 140 and (height / 2) - 50 <= mouse[1] <= height / 2 - 10:
-                pygame.draw.rect(self.screen, color_light, [width / 2, (height / 2) - 50, 140, 40])
-
-            elif width / 2 <= mouse[0] <= width / 2 + 140 and (height / 2) - 100 <= mouse[1] <= height / 2 - 60:
-               pygame.draw.rect(self.screen, color_light, [width / 2, (height / 2) - 100, 140, 40])
-
-            elif width / 2 <= mouse[0] <= width / 2 + 140 and (height / 2) + 100 <= mouse[1] <= height / 2 + 160:
-               pygame.draw.rect(self.screen, color_light, [width / 2, (height / 2) + 100, 140, 40])
-            else:
-                pygame.draw.rect(self.screen, color_dark, [width / 2, height / 2, 140, 40])
-                pygame.draw.rect(self.screen, color_dark, [width / 2, (height / 2) + 50, 140, 40])
-                pygame.draw.rect(self.screen, color_dark, [width / 2, (height / 2) - 50, 140, 40])
-                pygame.draw.rect(self.screen, color_dark, [width / 2, (height / 2) - 100, 140, 40])
-                pygame.draw.rect(self.screen, color_dark, [width / 2, (height / 2) + 100, 140, 40])
-
+            for i in range(len(self.items)):
+                if width / 2 <= mouse[0] <= width / 2 + 140 and (height / 2) - 100 + i * 50 <= mouse[
+                    1] <= height / 2 - 60 + i * 50:
+                    pygame.draw.rect(self.screen, color_light, [width / 2, (height / 2) - 100 + i * 50, 140, 40])
+                else:
+                    pygame.draw.rect(self.screen, color_dark, [width / 2, (height / 2) - 100 + i * 50, 140, 40])
                 # superimposing the text onto our button
-
-            self.screen.blit(text1, ((width / 2) + 5, (height / 2) - 100))
-            self.screen.blit(text2, ((width / 2) + 5, (height / 2) - 50))
-            self.screen.blit(text3, ((width / 2) + 5, (height / 2)))
-            self.screen.blit(text4, ((width / 2) + 5, (height / 2) + 50))
-            self.screen.blit(text5, ((width / 2) + 5, (height / 2) + 100))
-
+                self.screen.blit(texts[i], ((width / 2) + 5, (height / 2) - 100 + i * 50))
             # updates the frames of the game
             pygame.display.update()
-
-
 
     def run(self, language):
         clock = pygame.time.Clock()

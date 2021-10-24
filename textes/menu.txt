@@ -1,5 +1,5 @@
-Francais
-English
-Deutch
-Espanol
-Exit
+Francais fr
+English en
+Deutch de
+Espanol sp
+Exit ex
