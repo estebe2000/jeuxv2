@@ -37,7 +37,7 @@ class MapManager:
 
         self.register_map("story",portals=[
             Portal(from_world="story", origin_point="enter_world", target_world="world", teleport_point="player")], npcs=[
-            NPC("boss", nb_points=2, dialog=[], file_text='boos', lang=(self.get_language()))
+            NPC("boss", nb_points=2, dialog=[], lang=(self.get_language()))
         ])
 
         self.register_map("world",portals=[

@@ -1,4 +1,5 @@
 import pygame
+import csv
 
 from src.animation import AnimateSprite
 
@@ -74,16 +75,18 @@ class Player(Entity):
 
 class NPC(Entity):
     
-    def __init__(self, name, nb_points, dialog, file_text="", lang='fr'):
+    def __init__(self, name, nb_points, dialog, lang='fr'):
         super().__init__(name, 0, 0)
         self.nb_points = nb_points
         self.dialog = dialog
-        self.file_text = file_text
         if not dialog:
-            with open(f"../textes/{name}_{lang}.txt", "r") as filin:
-                for ligne in filin:
-                    ligne = ligne.replace('"', '').strip()
-                    dialog.append(ligne)
+            with open(f"../textes/{name}.csv", newline='') as f:
+                reader = csv.reader(f, delimiter=';', quoting=csv.QUOTE_NONE)
+                for row in reader:
+                    if (row[0] == lang):
+                        for dial in row[1].split(':'):
+                            print(dial)
+                            dialog.append(dial)
         self.points = []
         self.name = name
         self.speed = 1
