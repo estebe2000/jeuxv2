@@ -85,7 +85,7 @@ class NPC(Entity):
                 for row in reader:
                     if (row[0] == lang):
                         for dial in row[1].split(':'):
-                            print(dial)
+                            # print(dial)
                             dialog.append(dial)
         self.points = []
         self.name = name

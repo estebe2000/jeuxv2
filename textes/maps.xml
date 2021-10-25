@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<maps>
+    <map data-id="story">
+        <nom>story</nom>
+        <designer>Estebe-0</designer>
+		<portal>
+		    <from_world>story</from_world>
+			<origin_point>enter_world</origin_point>
+			<target_world>world</target_world>
+			<teleport_point>player</teleport_point>
+		</portal>
+		<npc>
+				<nompnj>boss</nompnj>
+				<nb_points>2</nb_points>
+				<dial></dial>
+		</npc>
+	</map>
+	<map data-id="world">
+        <nom>world</nom>
+        <designer>Estebe-0</designer>
+		<portal>
+		    <from_world>world</from_world>
+			<origin_point>enter_house</origin_point>
+			<target_world>house</target_world>
+			<teleport_point>spawn_house</teleport_point>
+		</portal>
+		<portal>
+		    <from_world>world</from_world>
+		  	<origin_point>enter_house1</origin_point>
+		  	<target_world>house1</target_world>
+		  	<teleport_point>spawn_house</teleport_point>
+		</portal>
+		<portal>
+		    <from_world>world</from_world>
+		  	<origin_point>enter_dungeon</origin_point>
+		  	<target_world>dungeon</target_world>
+		  	<teleport_point>spawn_dungeon</teleport_point>
+		</portal>
+		<npc>
+				<nompnj>paul</nompnj>
+				<nb_points>4</nb_points>
+				<dial>'Bonne aventure', 'Merci pour tout', 'A bientot'</dial>
+		</npc>
+		<npc>
+				<nompnj>robin</nompnj>
+				<nb_points>2</nb_points>
+				<dial>'Bonne aventura', 'Merki pour tout', 'A vientot'</dial>
+		</npc>
+	</map>
+	<map data-id="house">
+        <nom>house</nom>
+        <designer>Estebe-0</designer>
+		<portal>
+		    <from_world>house</from_world>
+			<origin_point>exit_house</origin_point>
+			<target_world>world</target_world>
+			<teleport_point>enter_house_exit</teleport_point>
+		</portal>
+
+	</map>
+	<map data-id="house1">
+        <nom>house1</nom>
+        <designer>Estebe-0</designer>
+		<portal>
+		    <from_world>house1</from_world>
+			<origin_point>exit_house</origin_point>
+			<target_world>world</target_world>
+			<teleport_point>enter_house1_exit</teleport_point>
+		</portal>
+
+	</map>
+	<map data-id="dungeon">
+        <nom>dungeon</nom>
+        <designer>Estebe-0</designer>
+		<portal>
+		    <from_world>dungeon</from_world>
+			<origin_point>exit_dungeon</origin_point>
+			<target_world>world</target_world>
+			<teleport_point>dungeon_exit_spawn</teleport_point>
+		</portal>
+		<npc>
+				<nompnj>boss</nompnj>
+				<nb_points>8</nb_points>
+				<dialog>'Tuer!!!!', 'Mon tresorrrrrr', 'A votre bon coeur'</dialog>
+		</npc>
+	</map>
+</maps>

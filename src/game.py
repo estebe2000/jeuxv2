@@ -83,13 +83,14 @@ class Game:
                     # if the mouse is clicked on the
                     for i in range(len(self.items)):
 
-                        if width / 2 <= mouse[0] <= width / 2 + 140 and (height / 2) - 100 + i * 50 <= mouse[
+                        if width / 2 <= mouse[0] <= width / 2 + 140 and (height / 2) + 100 <= mouse[
+                            1] <= height / 2 + 160:
+                            pygame.quit()
+                        elif width / 2 <= mouse[0] <= width / 2 + 140 and (height / 2) - 100 + i * 50 <= mouse[
                             1] <= height / 2 - 60 + i * 50:
                             self.language = langs[i]
                             self.run(self.language)
-                        elif width / 2 <= mouse[0] <= width / 2 + 140 and (height / 2) + 100 <= mouse[
-                            1] <= height / 2 + 160:
-                            pygame.quit()
+
 
             mouse = pygame.mouse.get_pos()
 
