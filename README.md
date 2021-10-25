@@ -9,7 +9,12 @@ N'hésitez pas à mettre des suggestions de modifications :)
 Code d'un jeu en python par Graveen (avec mes modifications)
 
 ## 😋 NSI
-
+Nous avons :
+  - un menu
+  - des musiques de fond
+  - des bruits de pas
+  - un xml pour charger les maps et npcs
+  - un csv pour la traduction des dialogues
 
 
 ## ❤️ A suivre
