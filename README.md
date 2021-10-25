@@ -13,7 +13,7 @@ https://www.youtube.com/user/Gravenilvectuto
 Nous avons :
   - un menu
   - des musiques de fond
-  - des bruits de pas
+  - des bruits de pas et de lecture des dialogues
   - un xml pour charger les maps et npcs
   - un csv pour la traduction des dialogues
   - Des PNJ obligatoires pour sortir de la map
