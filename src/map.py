@@ -46,6 +46,8 @@ class MapManager:
         self.keyok = False
 
         self.info_key = False
+        self.logo = pygame.image.load("../medias/loupe.png")
+
 
 
     def check_npc_collision(self, dialog_box):
@@ -56,10 +58,13 @@ class MapManager:
                 sprite.talking()
                 if sprite.is_name() == self.key2continus:
                     self.keyok = True
+                    self.logo = pygame.image.load("../medias/loupe1.png")
+
                     print("ok", self.key2continus)
 
 
     def check_key_collection(self,dialog_box,info=[]):
+
         for portal in self.get_map().portals:
             if portal.from_world == self.current_map :
                 point = self.get_object(portal.origin_point)
@@ -101,9 +106,11 @@ class MapManager:
     def teleport_player(self, name):
         if self.get_key() == 'None':
             self.keyok = True
+            self.logo = pygame.image.load("../medias/loupe1.png")
         else:
             self.key2continus = self.get_key()
             self.keyok = False
+            self.logo = pygame.image.load("../medias/loupe.png")
 
         print(self.keyok, self.get_key())
         point = self.get_object(name)
@@ -229,6 +236,10 @@ class MapManager:
         self.screen.blit(date, (10, 10))
         score_display = myfont.render(dif, 1, (255, 255, 0))
         self.screen.blit(score_display, (10, 40))
+        key = self.get_key()
+        self.screen.blit(self.logo, (720, 10))
+
+
         self.get_group().center(self.player.rect.center)
 
     def ma_musique_de_fond(self, choix_musique):
