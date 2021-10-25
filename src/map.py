@@ -4,8 +4,9 @@ import pygame, pytmx, pyscroll
 from src.player import NPC
 import xml.etree.ElementTree as ET
 
-import string
+import datetime
 
+now = datetime.datetime.now()
 
 @dataclass
 class Portal:
@@ -23,6 +24,7 @@ class Map:
     tmx_data: pytmx.TiledMap
     portals: list[Portal]
     npcs: list[NPC]
+    key2cont: str
 
 
 class MapManager:
@@ -32,7 +34,7 @@ class MapManager:
         self.screen = screen
         self.player = player
         self.current_map = "story"
-        # lancer don sonore
+        # lancer font sonore
         self.ma_musique_de_fond(self.current_map)
         self.language = language
 
@@ -41,24 +43,48 @@ class MapManager:
         self.teleport_player("player")
         self.teleport_npc()
 
+        self.keyok = False
+
+        self.info_key = False
+
+
     def check_npc_collision(self, dialog_box):
+
         for sprite in self.get_group().sprites():
             if sprite.feet.colliderect(self.player.rect) and type(sprite) is NPC:
                 dialog_box.execute(sprite.dialog)
+                sprite.talking()
+                if sprite.is_name() == self.key2continus:
+                    self.keyok = True
+                    print("ok", self.key2continus)
+
+
+    def check_key_collection(self,dialog_box,info=[]):
+        for portal in self.get_map().portals:
+            if portal.from_world == self.current_map :
+                point = self.get_object(portal.origin_point)
+                rect = pygame.Rect(point.x, point.y, point.width, point.height)
+                if self.player.feet.colliderect(rect) and not(self.keyok) and not(self.info_key):
+                    dialog_box.execute(info)
+                    self.info_key = True
+                elif self.player.feet.colliderect(rect) and not(self.keyok) and self.info_key:
+                    dialog_box.next_text()
+                    self.info_key = False
 
     def check_collisions(self):
         # portails
         for portal in self.get_map().portals:
-            if portal.from_world == self.current_map:
+            if portal.from_world == self.current_map :
                 point = self.get_object(portal.origin_point)
                 rect = pygame.Rect(point.x, point.y, point.width, point.height)
 
-                if self.player.feet.colliderect(rect):
+                if self.player.feet.colliderect(rect) and self.keyok:
                     copy_portal = portal
                     self.current_map = portal.target_world
                     self.teleport_player(copy_portal.teleport_point)
-                    # lancer don sonore
+                    # lancer font sonore
                     self.ma_musique_de_fond(self.current_map)
+
 
         # collision
         for sprite in self.get_group().sprites():
@@ -73,6 +99,13 @@ class MapManager:
                 sprite.move_back()
 
     def teleport_player(self, name):
+        if self.get_key() == 'None':
+            self.keyok = True
+        else:
+            self.key2continus = self.get_key()
+            self.keyok = False
+
+        print(self.keyok, self.get_key())
         point = self.get_object(name)
 
         self.player.position[0] = point.x
@@ -114,6 +147,7 @@ class MapManager:
             nbport = (len(AAA.findall('portal')))
             npnpc = (len(AAA.findall('npc')))
             name = AAA[0].text
+            key = AAA[1].text
             # print(f"La map {name} a {nbport} portails et {npnpc} PNJ")
 
             # Charger la carte
@@ -156,13 +190,16 @@ class MapManager:
                 group.add(npc)
 
             # Creer un objet map
-            self.maps[name] = Map(name, walls, group, tmx_data, portals, npcs)
+            self.maps[name] = Map(name, walls, group, tmx_data, portals, npcs, key)
 
     def get_map(self):
         return self.maps[self.current_map]
 
     def get_group(self):
         return self.get_map().group
+
+    def get_key(self):
+        return str(self.get_map().key2cont)
 
     def get_walls(self):
         return self.get_map().walls
@@ -184,6 +221,14 @@ class MapManager:
 
     def draw(self):
         self.get_group().draw(self.screen)
+        myfont = pygame.font.Font("../dialogs/dialog_font.ttf", 18)
+        now2 = datetime.datetime.now()
+        dif = str(now2 - now)
+        nowstr = now2.strftime("%Y-%m-%d %H:%M:%S")
+        date = myfont.render(nowstr, 1, (255, 255, 0))
+        self.screen.blit(date, (10, 10))
+        score_display = myfont.render(dif, 1, (255, 255, 0))
+        self.screen.blit(score_display, (10, 40))
         self.get_group().center(self.player.rect.center)
 
     def ma_musique_de_fond(self, choix_musique):
@@ -195,6 +240,7 @@ class MapManager:
         pygame.mixer.music.play(-1)  # If the loops is -1 then the music will repeat indefinitely.
 
     def update(self):
+
         self.get_group().update()
         self.check_collisions()
 

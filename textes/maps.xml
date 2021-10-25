@@ -2,7 +2,7 @@
 <maps>
     <map data-id="story">
         <nom>story</nom>
-        <designer>Estebe-0</designer>
+        <key>boss</key>
 		<portal>
 		    <from_world>story</from_world>
 			<origin_point>enter_world</origin_point>
@@ -17,7 +17,7 @@
 	</map>
 	<map data-id="world">
         <nom>world</nom>
-        <designer>Estebe-0</designer>
+        <key></key>
 		<portal>
 		    <from_world>world</from_world>
 			<origin_point>enter_house</origin_point>
@@ -49,7 +49,7 @@
 	</map>
 	<map data-id="house">
         <nom>house</nom>
-        <designer>Estebe-0</designer>
+        <key></key>
 		<portal>
 		    <from_world>house</from_world>
 			<origin_point>exit_house</origin_point>
@@ -60,7 +60,7 @@
 	</map>
 	<map data-id="house1">
         <nom>house1</nom>
-        <designer>Estebe-0</designer>
+        <key></key>
 		<portal>
 		    <from_world>house1</from_world>
 			<origin_point>exit_house</origin_point>
@@ -71,7 +71,7 @@
 	</map>
 	<map data-id="dungeon">
         <nom>dungeon</nom>
-        <designer>Estebe-0</designer>
+        <key>boss</key>
 		<portal>
 		    <from_world>dungeon</from_world>
 			<origin_point>exit_dungeon</origin_point>

@@ -91,6 +91,7 @@ class NPC(Entity):
         self.name = name
         self.speed = 1
         self.current_point = 0
+        self.talk = False
 
     def move(self):
         current_point = self.current_point
@@ -127,3 +128,11 @@ class NPC(Entity):
             rect = pygame.Rect(point.x, point.y, point.width, point.height)
             self.points.append(rect)
 
+    def talking(self):
+        self.talk = True
+
+    def is_talking(self):
+        return self.talk
+
+    def is_name(self):
+        return self.name
