@@ -7,6 +7,7 @@ N'hésitez pas à mettre des suggestions de modifications :)
 ## 🎮 Jeu en python
 
 Code d'un jeu en python par Graveen (avec mes modifications des NSI)
+https://www.youtube.com/user/Gravenilvectuto
 
 ## 😋 NSI
 Nous avons :
