@@ -15,6 +15,7 @@ Nous avons :
   - des bruits de pas
   - un xml pour charger les maps et npcs
   - un csv pour la traduction des dialogues
+  - Des PNJ obligatoires pour sortir de la map
 
 
 ## ❤️ A suivre
