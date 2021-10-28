@@ -17,6 +17,8 @@ Nous avons :
   - un xml pour charger les maps et npcs
   - un csv pour la traduction des dialogues
   - Des PNJ obligatoires pour sortir de la map
+  - Des effets meteos (rain , snow, blur, superblur)
+  - Des effets de feu
 
 
 ## ❤️ A suivre
