@@ -1,10 +1,13 @@
-import copy
 
 import pygame
 
 from player import Player
 from src.dialog import DialogBox
 from src.map import MapManager
+from src.fx_rain import *
+from src.fx_fire import *
+import platform
+
 
 
 class Game:
@@ -13,7 +16,10 @@ class Game:
         self.running = True
         # Affichage de la fenêtre
         self.screen = pygame.display.set_mode((800, 600))
-        pygame.display.set_caption("BasiqueGame")
+
+        pygame.display.set_caption("Menu- Jeux")
+
+
         self.groupeGlobal = pygame.sprite.Group()
 
         # Générer le joeur
@@ -71,6 +77,11 @@ class Game:
         self.screen.blit(logo_fond, (0, 0))
 
         while True:
+            self.screen.blit(image_fond, (0, 0))
+            self.screen.blit(logo_fond, (0, 0))
+
+            Particle_fire(640, 430, res=2, screen=self.screen).show_particle()
+            Particle_rain( y=0, vit=5, screen=self.screen).show_particle()
 
             for ev in pygame.event.get():
 
@@ -83,10 +94,10 @@ class Game:
                     # if the mouse is clicked on the
                     for i in range(len(self.items)):
 
-                        if width / 2 <= mouse[0] <= width / 2 + 140 and (height / 2) + 100 <= mouse[
+                        if width / 2 - 70 <= mouse[0] <= width / 2 + 70 and (height / 2) + 100 <= mouse[
                             1] <= height / 2 + 160:
                             pygame.quit()
-                        elif width / 2 <= mouse[0] <= width / 2 + 140 and (height / 2) - 100 + i * 50 <= mouse[
+                        elif width / 2 - 70 <= mouse[0] <= width / 2 + 70 and (height / 2) - 100 + i * 50 <= mouse[
                             1] <= height / 2 - 60 + i * 50:
                             self.language = langs[i]
                             self.run(self.language)
@@ -97,14 +108,15 @@ class Game:
             # if mouse is hovered on a button it
             # changes to lighter shade
             for i in range(len(self.items)):
-                if width / 2 <= mouse[0] <= width / 2 + 140 and (height / 2) - 100 + i * 50 <= mouse[
+                if width / 2 - 70 <= mouse[0] <= width / 2 + 70 and (height / 2) - 100 + i * 50 <= mouse[
                     1] <= height / 2 - 60 + i * 50:
-                    pygame.draw.rect(self.screen, color_light, [width / 2, (height / 2) - 100 + i * 50, 140, 40])
+                    pygame.draw.rect(self.screen, color_light, [width / 2 - 70, (height / 2) - 100 + i * 50, 140, 40])
                 else:
-                    pygame.draw.rect(self.screen, color_dark, [width / 2, (height / 2) - 100 + i * 50, 140, 40])
+                    pygame.draw.rect(self.screen, color_dark, [width / 2 - 70, (height / 2) - 100 + i * 50, 140, 40])
                 # superimposing the text onto our button
-                self.screen.blit(texts[i], ((width / 2) + 5, (height / 2) - 100 + i * 50))
+                self.screen.blit(texts[i], ((width / 2) - 65, (height / 2) - 90 + i * 50))
             # updates the frames of the game
+
             pygame.display.update()
 
     def run(self, language):
@@ -120,6 +132,9 @@ class Game:
             self.update()
             self.map_manager.draw()
             self.dialog_box.render(self.screen)
+            caption = 'NSI JEUX -FPS: {} - Python {}  Pygame {} - Language {} '.format(int(clock.get_fps()),platform.python_version(),pygame.version.ver,self.language)
+            pygame.display.set_caption(caption)
+
             pygame.display.flip()
 
             for event in pygame.event.get():

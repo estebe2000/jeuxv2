@@ -3,6 +3,10 @@ import pygame, pytmx, pyscroll
 
 from src.player import NPC
 import xml.etree.ElementTree as ET
+from src.effects import *
+from src.fx_rain import *
+from src.fx_fire import *
+import os.path
 
 import datetime
 
@@ -25,6 +29,10 @@ class Map:
     portals: list[Portal]
     npcs: list[NPC]
     key2cont: str
+    meteo : str
+    feu: list[pygame.Rect]
+    zoom: float
+
 
 
 class MapManager:
@@ -34,7 +42,6 @@ class MapManager:
         self.screen = screen
         self.player = player
         self.current_map = "story"
-        # lancer font sonore
         self.ma_musique_de_fond(self.current_map)
         self.language = language
 
@@ -60,7 +67,8 @@ class MapManager:
                     self.keyok = True
                     self.logo = pygame.image.load("../medias/loupe1.png")
 
-                    print("ok", self.key2continus)
+
+
 
 
     def check_key_collection(self,dialog_box,info=[]):
@@ -104,6 +112,7 @@ class MapManager:
                 sprite.move_back()
 
     def teleport_player(self, name):
+
         if self.get_key() == 'None':
             self.keyok = True
             self.logo = pygame.image.load("../medias/loupe1.png")
@@ -112,37 +121,13 @@ class MapManager:
             self.keyok = False
             self.logo = pygame.image.load("../medias/loupe.png")
 
-        print(self.keyok, self.get_key())
         point = self.get_object(name)
 
         self.player.position[0] = point.x
         self.player.position[1] = point.y
         self.player.save_location()
 
-    def register_map(self, name, portals=[], npcs=[]):
-        # Charger la carte clasique
-        tmx_data = pytmx.util_pygame.load_pygame(f"../maps/{name}.tmx")
-        map_data = pyscroll.data.TiledMapData(tmx_data)
-        map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.screen.get_size())
-        map_layer.zoom = 2
 
-        # Les collisions
-        walls = []
-
-        for obj in tmx_data.objects:
-            if obj.type == "collision":
-                walls.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
-
-        # Dessiner les différents calques
-        group = pyscroll.PyscrollGroup(map_layer=map_layer, default_layer=5)
-        group.add(self.player)
-
-        # recuperer tous les npcs pour les ajouter au groupe
-        for npc in npcs:
-            group.add(npc)
-
-        # Creer un objet map
-        self.maps[name] = Map(name, walls, group, tmx_data, portals, npcs)
 
     def register_maps(self):
         doc = ET.parse('../textes/maps.xml')
@@ -155,20 +140,27 @@ class MapManager:
             npnpc = (len(AAA.findall('npc')))
             name = AAA[0].text
             key = AAA[1].text
+            meteo = AAA[2].text
+            zoom = float(AAA[3].text)
             # print(f"La map {name} a {nbport} portails et {npnpc} PNJ")
 
             # Charger la carte
             tmx_data = pytmx.util_pygame.load_pygame(f"../maps/{name}.tmx")
             map_data = pyscroll.data.TiledMapData(tmx_data)
             map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.screen.get_size())
-            map_layer.zoom = 2
+            map_layer.zoom = float(AAA[3].text)
 
             # Les collisions
             walls = []
+            # les feux
+            feu = []
 
             for obj in tmx_data.objects:
                 if obj.type == "collision":
                     walls.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
+                if obj.type == "feu":
+                    feu.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
+
 
             # Dessiner les différents calques
             group = pyscroll.PyscrollGroup(map_layer=map_layer, default_layer=5)
@@ -176,15 +168,15 @@ class MapManager:
 
             # ajout des portails
             for port in range(nbport):
-                portals.append(Portal(from_world=f'{AAA[2 + port][0].text}', origin_point=f'{AAA[2 + port][1].text}',
-                                      target_world=f'{AAA[2 + port][2].text}',
-                                      teleport_point=f'{AAA[2 + port][3].text}'))
+                portals.append(Portal(from_world=f'{AAA[4 + port][0].text}', origin_point=f'{AAA[4 + port][1].text}',
+                                      target_world=f'{AAA[4 + port][2].text}',
+                                      teleport_point=f'{AAA[4 + port][3].text}'))
             # ajout des npcs
             for pnj in range(npnpc):
                 new_dial = []
-                nom_pnj = AAA[2 + nbport + pnj][0].text
-                nbpoint = int(AAA[2 + nbport + pnj][1].text)
-                dial_pnj = f"[{AAA[2 + nbport + pnj][2].text}]"
+                nom_pnj = AAA[4 + nbport + pnj][0].text
+                nbpoint = int(AAA[4 + nbport + pnj][1].text)
+                dial_pnj = f"[{AAA[4 + nbport + pnj][2].text}]"
                 if dial_pnj != '[None]':
                     txt_dial = str(dial_pnj).split(",")
                     for txt in range(len(txt_dial)):
@@ -197,7 +189,7 @@ class MapManager:
                 group.add(npc)
 
             # Creer un objet map
-            self.maps[name] = Map(name, walls, group, tmx_data, portals, npcs, key)
+            self.maps[name] = Map(name, walls, group, tmx_data, portals, npcs, key, meteo, feu, zoom)
 
     def get_map(self):
         return self.maps[self.current_map]
@@ -211,8 +203,26 @@ class MapManager:
     def get_walls(self):
         return self.get_map().walls
 
+    def get_feu(self):
+        return self.get_map().feu
+
+    def loc_feu(self):
+        # les feux
+        feux = []
+
+        for obj in self.get_map().tmx_data.objects:
+            if obj.type == "feu":
+                feux.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
+        return feux
+
     def get_language(self):
         return self.language
+
+    def get_meteo(self):
+        return str(self.get_map().meteo)
+
+    def get_zoom(self):
+        return self.get_map().zoom
 
     def get_object(self, name):
         return self.get_map().tmx_data.get_object_by_name(name)
@@ -228,6 +238,7 @@ class MapManager:
 
     def draw(self):
         self.get_group().draw(self.screen)
+        blur(self.screen, (0, 0), (800, 45),1)
         myfont = pygame.font.Font("../dialogs/dialog_font.ttf", 18)
         now2 = datetime.datetime.now()
         dif = str(now2 - now)
@@ -235,18 +246,28 @@ class MapManager:
         date = myfont.render(nowstr, 1, (255, 255, 0))
         self.screen.blit(date, (10, 10))
         score_display = myfont.render(dif, 1, (255, 255, 0))
-        self.screen.blit(score_display, (10, 40))
+        self.screen.blit(score_display, (300, 10))
         key = self.get_key()
         self.screen.blit(self.logo, (720, 10))
-
-
         self.get_group().center(self.player.rect.center)
+
+        #for feux in self.loc_feu():
+            #print(feux.x, feux.y)
+            #Particle_fire(feux.x*self.get_zoom(), feux.y, res=2, screen=self.screen).show_particle()
+        if self.get_meteo()=="pluis": Particle_rain( y=0, vit=5, screen=self.screen).show_particle()
+        elif self.get_meteo()=="neige": Particle_rain( y=0, vit=1, screen=self.screen).show_particle()
+        elif self.get_meteo()=="flou": blur(self.screen, (0, 0), (800, 600),1)
+        elif self.get_meteo()=="superflou": blur(self.screen, (0, 0), (800, 600), 3)
+
 
     def ma_musique_de_fond(self, choix_musique):
         # definir la musique
         pygame.mixer.init()
-        file = '../sounds/' + choix_musique + '.wav'
-        pygame.mixer.music.load(file)
+        #file = '../sounds/' + choix_musique + '.mp3'
+        PATH = '../sounds/' + choix_musique + '.mp3'
+        if not(os.path.isfile(PATH) and os.access(PATH, os.R_OK)):
+           PATH = '../sounds/default.mp3'
+        pygame.mixer.music.load(PATH)
         pygame.mixer.music.set_volume(0.2)
         pygame.mixer.music.play(-1)  # If the loops is -1 then the music will repeat indefinitely.
 

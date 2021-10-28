@@ -1,5 +1,5 @@
 import pygame
-
+import os.path
 
 class AnimateSprite(pygame.sprite.Sprite):
 
@@ -28,7 +28,12 @@ class AnimateSprite(pygame.sprite.Sprite):
             if self.animation_index >= len(self.images[name]):
                 self.animation_index = 0
                 # if self.name == "player" or self.name == "boss":
-                pas = pygame.mixer.Sound(f'../sounds/marche_{self.name}.wav')
+                # pas = pygame.mixer.Sound(f'../sounds/marche_{self.name}.wav')
+                PATH = (f'../sounds/marche_{self.name}.wav')
+                if not(os.path.isfile(PATH) and os.access(PATH, os.R_OK)):
+                    pas = pygame.mixer.Sound(f'../sounds/marche_player.wav')
+                else :
+                    pas = pygame.mixer.Sound(f'../sounds/marche_{self.name}.wav')
                 if self.name == 'player':
                     pygame.mixer.Sound.set_volume(pas, 0.8)
                 else:
