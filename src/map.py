@@ -251,9 +251,9 @@ class MapManager:
         self.screen.blit(self.logo, (720, 10))
         self.get_group().center(self.player.rect.center)
 
-        #for feux in self.loc_feu():
-            #print(feux.x, feux.y)
-            #Particle_fire(feux.x*self.get_zoom(), feux.y, res=2, screen=self.screen).show_particle()
+        for feux in self.loc_feu():
+            print(feux.x, feux.y)
+            Particle_fire(feux.x*self.get_zoom(), feux.y*self.get_zoom(), res=2, screen=self.screen).show_particle()
         if self.get_meteo()=="pluis": Particle_rain( y=0, vit=5, screen=self.screen).show_particle()
         elif self.get_meteo()=="neige": Particle_rain( y=0, vit=1, screen=self.screen).show_particle()
         elif self.get_meteo()=="flou": blur(self.screen, (0, 0), (800, 600),1)

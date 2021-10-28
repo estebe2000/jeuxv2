@@ -85,7 +85,7 @@
   </object>
   <object id="17" name="exit_house" type="zone_switch" x="142.774" y="280.855" width="34" height="22.5"/>
   <object id="18" name="enter_cave_house2" x="78.5571" y="154.814" width="43.2618" height="23.4545"/>
-  <object id="19" name="enter_cave_house2_exit" x="104.211" y="97.8666">
+  <object id="19" name="enter_cave_house2_exit" x="106.091" y="118.167">
    <point/>
   </object>
  </objectgroup>
