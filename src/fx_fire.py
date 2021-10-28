@@ -9,7 +9,7 @@ particles = list()
 
 
 class Particle_fire:
-    def __init__(self, x=315, y=500, sliders=(3, 3, 1, 1, 0), res=1, screen=pygame.display.set_mode((800, 600))):
+    def __init__(self, x=315, y=500, sliders=(3, 1, 0.4, 1, 0), res=1, screen=pygame.display.set_mode((800, 600))):
         self.x, self.y = x, y
         self.maxlife = randint(13 + int(sliders[0] * 5), 27 + int(sliders[0] * 10))
         self.life = self.maxlife

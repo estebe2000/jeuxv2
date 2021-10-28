@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import pygame, pytmx, pyscroll
 
+from src.fx_light import Particle_light
 from src.player import NPC
 import xml.etree.ElementTree as ET
 from src.effects import *
@@ -31,6 +32,7 @@ class Map:
     key2cont: str
     meteo : str
     feu: list[pygame.Rect]
+    bulle: list[pygame.Rect]
     zoom: float
 
 
@@ -154,12 +156,16 @@ class MapManager:
             walls = []
             # les feux
             feu = []
+            # les bulles
+            bulle = []
 
             for obj in tmx_data.objects:
                 if obj.type == "collision":
                     walls.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
                 if obj.type == "feu":
                     feu.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
+                if obj.type == "bulle":
+                    bulle.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
 
 
             # Dessiner les différents calques
@@ -189,7 +195,7 @@ class MapManager:
                 group.add(npc)
 
             # Creer un objet map
-            self.maps[name] = Map(name, walls, group, tmx_data, portals, npcs, key, meteo, feu, zoom)
+            self.maps[name] = Map(name, walls, group, tmx_data, portals, npcs, key, meteo, feu, bulle, zoom)
 
     def get_map(self):
         return self.maps[self.current_map]
@@ -206,6 +212,9 @@ class MapManager:
     def get_feu(self):
         return self.get_map().feu
 
+    def get_bulle(self):
+        return self.get_map().bulle
+
     def loc_feu(self):
         # les feux
         feux = []
@@ -214,6 +223,15 @@ class MapManager:
             if obj.type == "feu":
                 feux.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
         return feux
+
+    def loc_bulle(self):
+        # les bulles
+        bulles = []
+
+        for obj in self.get_map().tmx_data.objects:
+            if obj.type == "bulle":
+                bulles.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
+        return bulles
 
     def get_language(self):
         return self.language
@@ -238,6 +256,7 @@ class MapManager:
 
     def draw(self):
         self.get_group().draw(self.screen)
+        self.screen.set_colorkey((0, 0, 0))
         blur(self.screen, (0, 0), (800, 45),1)
         myfont = pygame.font.Font("../dialogs/dialog_font.ttf", 18)
         now2 = datetime.datetime.now()
@@ -248,12 +267,13 @@ class MapManager:
         score_display = myfont.render(dif, 1, (255, 255, 0))
         self.screen.blit(score_display, (300, 10))
         key = self.get_key()
-        self.screen.blit(self.logo, (720, 10))
+        self.screen.blit(self.logo, (740, 20))
         self.get_group().center(self.player.rect.center)
 
         for feux in self.loc_feu():
-            print(feux.x, feux.y)
             Particle_fire(feux.x*self.get_zoom(), feux.y*self.get_zoom(), res=2, screen=self.screen).show_particle()
+        for bulles in self.loc_bulle():
+            Particle_light(bulles.x*self.get_zoom(), bulles.y*self.get_zoom(), screen=self.screen, rgb=(0, 0, 0), rad = 2, vit=5, haut=1).show_particle()
         if self.get_meteo()=="pluis": Particle_rain( y=0, vit=5, screen=self.screen).show_particle()
         elif self.get_meteo()=="neige": Particle_rain( y=0, vit=1, screen=self.screen).show_particle()
         elif self.get_meteo()=="flou": blur(self.screen, (0, 0), (800, 600),1)

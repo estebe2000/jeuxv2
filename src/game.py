@@ -6,6 +6,7 @@ from src.dialog import DialogBox
 from src.map import MapManager
 from src.fx_rain import *
 from src.fx_fire import *
+from src.fx_light import *
 import platform
 
 
@@ -82,6 +83,7 @@ class Game:
 
             Particle_fire(640, 430, res=2, screen=self.screen).show_particle()
             Particle_rain( y=0, vit=5, screen=self.screen).show_particle()
+            Particle_light(x=90,y=260,screen=self.screen,rgb=(255,125,125), rad = 2, vit=8, haut=1).show_particle()
 
             for ev in pygame.event.get():
 

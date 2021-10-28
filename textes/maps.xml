@@ -3,7 +3,7 @@
     <map data-id="story">
         <nom>story</nom>
         <key>guide</key>
-		<meteo>neige</meteo>
+		<meteo></meteo>
 		<zoom>2</zoom>
 		<portal>
 		    <from_world>story</from_world>

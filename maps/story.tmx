@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="25" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="17">
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="25" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="20">
  <tileset firstgid="1" source="nature.tsx"/>
  <tileset firstgid="721" source="atlas.tsx"/>
  <tileset firstgid="1745" source="house.tsx"/>
@@ -85,7 +85,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2381,2382,2383,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,1003,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -162,14 +162,19 @@
   <object id="1" type="collision" x="-0.00165" y="-1.211" width="47.4212" height="288.422"/>
   <object id="2" type="collision" x="41.4984" y="1.289" width="359.503" height="45.422"/>
   <object id="3" type="collision" x="41.7485" y="224.789" width="359.503" height="62.922"/>
-  <object id="4" type="collision" x="383.748" y="46.789" width="17.003" height="80.922"/>
-  <object id="5" type="collision" x="384.498" y="161.539" width="17.003" height="64.422"/>
+  <object id="4" type="collision" x="383.748" y="46.789" width="17.003" height="199.361"/>
   <object id="6" type="collision" x="195.998" y="163.124" width="55.503" height="62.3372"/>
   <object id="7" type="collision" x="196.749" y="47.039" width="55.503" height="63.5041"/>
   <object id="8" type="collision" x="336.249" y="49.039" width="49.003" height="35.422"/>
   <object id="9" type="collision" x="41.1614" y="192.039" width="37.6719" height="31.2558"/>
   <object id="10" type="collision" x="42.0779" y="45.3721" width="37.6719" height="34.7564"/>
   <object id="11" type="collision" x="322.664" y="196.122" width="26.003" height="28.922"/>
+  <object id="17" name="feu" type="feu" x="177.367" y="91.6008">
+   <point/>
+  </object>
+  <object id="19" name="bulle" type="bulle" x="103.853" y="219.375">
+   <point/>
+  </object>
  </objectgroup>
  <objectgroup id="9" name="points">
   <object id="12" name="player" type="start" x="120" y="160">
@@ -178,8 +183,5 @@
   <object id="13" name="guide_path1" x="293.916" y="84.534" width="16.3333" height="16"/>
   <object id="14" name="guide_path2" x="292.75" y="164.466" width="16.3333" height="16"/>
   <object id="15" name="enter_world" x="363.911" y="123.287" width="36.6789" height="48.4259"/>
-  <object id="16" name="feu" type="feu" x="153" y="223">
-   <point/>
-  </object>
  </objectgroup>
 </map>
